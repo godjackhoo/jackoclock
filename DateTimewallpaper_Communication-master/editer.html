@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=utf-8>
+    <meta name=viewport content="user-scalable=no,width=device-width,initial-scale=1">
+    <title>Jack O'clock</title>
+
+</head>
+<style>
+    #app {
+        display: -webkit-flex;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap
+    }
+
+    .edit {
+        display: -webkit-flex;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1
+    }
+</style>
+
+<body>
+<div id="app" align="centerText">
+    <canvas id="clockCanvas" width="480" height="480" ></canvas>
+</div>
+
+</body>
+
+<script src="./js/calendar.js"></script>
+
+<script src="https://cdn.bootcss.com/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+      crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+<script>
+    var defConf = {
+        "centerTextSize": 90,
+        "circleTextSize": 50,
+        "centerText": [
+            {
+                "bold": 1,
+                "type": "week",
+                "array": [
+                    "Thứ 2",
+                    "Thứ 3",
+                    "Thứ 4",
+                    "Thứ 5",
+                    "Thứ 6",
+                    "Thứ 7",
+                    "Chủ nhật"
+                ]
+            },
+            {
+                "bold": 0,
+                "type": "ampm",
+                "array": [
+                    "2019",
+                    "下午"
+                ]
+            }
+        ],
+        "circleText": [
+            {
+                "type": "month",
+                "array": [
+                    "Th 1",
+                    "Th 2",
+                    "Th 3",
+                    "Th 4",
+                    "Th 5",
+                    "Th 6",
+                    "Th 7",
+                    "Th 8",
+                    "Th 9",
+                    "Th 10",
+                    "Th 11",
+                    "Th 12"
+                ]
+            },
+            {
+                "type": "text",
+                "array": [
+                    " Ngày"
+                ]
+            },
+            {
+                "type": "day",
+                "array": [
+                    " 1",
+                    " 2",
+                    " 3",
+                    " 4",
+                    " 5",
+                    " 6",
+                    " 7",
+                    " 8",
+                    " 9",
+                    " 10",
+                    "11",
+                    "12",
+                    "13",
+                    "14",
+                    "15",
+                    "16",
+                    "17",
+                    "18",
+                    "19",
+                    "20",
+                    "21",
+                    "22",
+                    "23",
+                    "24",
+                    "25",
+                    "26",
+                    "27",
+                    "28",
+                    "29",
+                    "30",
+                    "31"
+                ]
+            },
+            {
+                "type": "text",
+                "array": [
+                    ""
+                ]
+            },
+            {
+                "type": "hour",
+                "array": [
+                    " 1",
+                    " 2",
+                    " 3",
+                    " 4",
+                    " 5",
+                    " 6",
+                    " 7",
+                    " 8",
+                    " 9",
+                    " 10",
+                    "11",
+                    "12"
+                ]
+            },
+            {
+                "type": "text",
+                "array": [
+                    "giờ"
+                ]
+            },
+            {
+                "type": "minute",
+                "array": [
+                    " 1",
+                    " 2",
+                    " 3",
+                    " 4",
+                    " 5",
+                    " 6",
+                    " 7",
+                    " 8",
+                    " 9",
+                    " 10",
+                    "11",
+                    "12",
+                    "13",
+                    "14",
+                    "15",
+                    "16",
+                    "17",
+                    "18",
+                    "19",
+                    "20",
+                    "21",
+                    "22",
+                    "23",
+                    "24",
+                    "25",
+                    "26",
+                    "27",
+                    "28",
+                    "29",
+                    "30",
+                    "31",
+                    "32",
+                    "33",
+                    "34",
+                    "35",
+                    "36",
+                    "37",
+                    "38",
+                    "39",
+                    "40",
+                    "41",
+                    "42",
+                    "43",
+                    "44",
+                    "45",
+                    "46",
+                    "47",
+                    "48",
+                    "49",
+                    "50",
+                    "51",
+                    "52",
+                    "53",
+                    "54",
+                    "55",
+                    "56",
+                    "57",
+                    "58",
+                    "59",
+                    " 60"
+                ]
+            },
+            {
+                "type": "text",
+                "array": [
+                    "phút"
+                ]
+            },
+            {
+                "type": "second",
+                "array": [
+                    " 1",
+                    " 2",
+                    " 3",
+                    " 4",
+                    " 5",
+                    " 6",
+                    " 7",
+                    " 8",
+                    " 9",
+                    " 10",
+                    "11",
+                    "12",
+                    "13",
+                    "14",
+                    "15",
+                    "16",
+                    "17",
+                    "18",
+                    "19",
+                    "20",
+                    "21",
+                    "22",
+                    "23",
+                    "24",
+                    "25",
+                    "26",
+                    "27",
+                    "28",
+                    "29",
+                    "30",
+                    "31",
+                    "32",
+                    "33",
+                    "34",
+                    "35",
+                    "36",
+                    "37",
+                    "38",
+                    "39",
+                    "40",
+                    "41",
+                    "42",
+                    "43",
+                    "44",
+                    "45",
+                    "46",
+                    "47",
+                    "48",
+                    "49",
+                    "50",
+                    "51",
+                    "52",
+                    "53",
+                    "54",
+                    "55",
+                    "56",
+                    "57",
+                    "58",
+                    "59",
+                    " 60"
+                ]
+            },
+            {
+                "type": "text",
+                "array": [
+                    "giây"
+                ]
+            }
+        ]
+    }
+
+    var centerTextSize = 90
+    var circleTextSize = 50
+    var conf = null
+    var clockCanvas = null
+    var ctx = null
+
+    //保证不超出绘制区域
+    var centerScale = 1
+
+    window.requestAnimFrame = (function () {
+        return window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.oRequestAnimationFrame ||
+            window.msRequestAnimationFrame ||
+            function (/* function */ callback, /* DOMElement */ element) {
+                window.setTimeout(callback, 1000 / 60);
+            };
+    })();
+
+    window.onresize = function () {
+        resetSize()
+    }
+
+    $(function () {
+        conf = defConf
+        clockCanvas = document.getElementById("clockCanvas")
+        ctx = clockCanvas.getContext("2d");
+        $("#confTextArea").val(JSON.stringify(defConf, null, 4))
+        resetConf()
+        resetSize()
+        play()
+    })
+
+    function resetSize() {
+        var canvasSize = 1
+        var width = document.documentElement.clientWidth
+        var height = document.documentElement.clientHeight
+        if (isMobile()) {
+            canvasSize = 3
+            document.getElementById("clockCanvas").style.width = width + "px"
+            document.getElementById("clockCanvas").style.height = width + "px"
+            document.getElementById("clockCanvas").width = width * canvasSize
+            document.getElementById("clockCanvas").height = width * canvasSize
+            $(".edit").height(width)
+        } else {
+            canvasSize = 1 / 2
+            document.getElementById("clockCanvas").width = width * canvasSize
+            document.getElementById("clockCanvas").height = width * canvasSize
+        }
+    }
+
+    function downJson() {
+        var blob = new Blob([JSON.stringify(conf)], {type: "text/json;charset=utf-8"});
+        var fileName = $("#confName").val()
+        saveAs(blob, fileName);
+    }
+
+    function resetConfByUser() {
+        try {
+            var confText = $("#confTextArea").val()
+            conf = JSON.parse(confText)
+            $("#confTextArea").val(JSON.stringify(conf, null, 4))
+            resetConf()
+        } catch (e) {
+            alert("配置有错")
+        }
+    }
+
+    function resetConf() {
+        var offsetX = 90;
+        centerTextSize = conf.centerTextSize;
+        circleTextSize = conf.circleTextSize;
+        conf.circleText.forEach((item) => {
+            ctx.font = circleTextSize + "px Arial";
+            item.offsetX = offsetX;
+            var max = 0
+            item.array.forEach((text) => {
+                max = Math.max(max, ctx.measureText(text).width)
+            })
+            offsetX += max;
+        })
+        centerScale = 1080 / (offsetX * 2 * 0.52)
+    }
+
+    function play() {
+        var curDate = new Date();
+        ctx.clearRect(0, 0, clockCanvas.width, clockCanvas.height);
+        conf.centerText.forEach((item, index) => {
+            drawCenterText(curDate, item, index, conf.centerText.length)
+        })
+        conf.circleText.forEach((item) => {
+            drawCircleText(curDate, item)
+        })
+        window.requestAnimFrame(this.play.bind(this));
+    }
+
+    function drawCenterText(curDate, item, index, allLength) {
+        if (allLength == 0) {
+            return
+        }
+        var scale = centerScale * 0.52 * (clockCanvas.width / 1080);
+        var width = clockCanvas.width;
+        var height = clockCanvas.height;
+        var text = item.array[getIndexByType(curDate, item).index]
+        if (item.type == "dateformat") {
+
+            var lunar = calendar.solar2lunar(curDate.getFullYear(), curDate.getMonth() + 1, curDate.getDate());
+            text = text.replace("LA", lunar.Animal)
+                .replace("LM", lunar.IMonthCn)
+                .replace("LD", lunar.IDayCn)
+
+            text = format(text, curDate)
+        }
+        var fontSize = centerTextSize / allLength
+        ctx.font = (item.bold == 1 ? "bold " : "") + fontSize + "px Arial ";
+        ctx.textBaseline = "middle";
+        var fontHeight = ctx.measureText("测").width * 1.3
+        var offsetY = fontHeight * index - (fontHeight / 2) * (allLength - 1)
+        ctx.save()
+        ctx.translate((width) / 2, (height) / 2)
+        ctx.scale(scale, scale)
+        ctx.fillText(text, -ctx.measureText(text).width / 2, offsetY);
+        ctx.restore()
+    }
+
+    function drawCircleText(curDate, item) {
+        var scale = centerScale * 0.52 * (clockCanvas.width / 1080);
+        var width = clockCanvas.width;
+        var height = clockCanvas.height;
+        ctx.font = (item.bold == 1 ? "bold " : "") + circleTextSize + "px Arial "
+        ctx.textBaseline = "middle";
+        var curIndex = getIndexByType(curDate, item).index;
+        var delta = getIndexByType(curDate, item).delta;
+        var addAngle = 360 / item.array.length;
+        var startAngle = -curIndex * addAngle - addAngle * delta;
+
+
+        var array = item.array.concat()
+        var clockwise = item.clockwise
+        var select = 0
+        if (clockwise == 1) {
+            select = item.array.length - 1 - curIndex;
+            startAngle = 0 - (addAngle * (curIndex + 1) + addAngle * delta) * -1;
+            // Collections.reverse(textBeans);
+            array.reverse()
+
+        } else {
+            select = curIndex;
+            startAngle = 0 - (addAngle * curIndex + addAngle * delta) * 1;
+        }
+
+
+        array.forEach((text, index) => {
+            if (select == index) {
+                ctx.fillStyle = "black";
+            } else {
+                ctx.fillStyle = "gray";
+            }
+            ctx.save()
+            ctx.translate((width) / 2, (height) / 2)
+            ctx.rotate(startAngle * Math.PI / 180)
+            ctx.scale(scale, scale)
+            startAngle += addAngle;
+            ctx.fillText(text, item.offsetX, 0);
+            ctx.restore()
+        })
+    }
+
+    function getIndexByType(curDate, item) {
+        var monthIndex = curDate.getMonth()
+        var dayIndex = curDate.getDate() - 1
+        var weekIndex = curDate.getDay()
+        var hourIndex = curDate.getHours() - 1
+        var minuteIndex = curDate.getMinutes() - 1
+        var secondIndex = curDate.getSeconds() - 1
+
+        var lunar = calendar.solar2lunar(curDate.getFullYear(), curDate.getMonth() + 1, curDate.getDate());
+
+        // console.log(lunar)
+        //处理动画
+        var secondDelta = (curDate.getMilliseconds() % 1000) * 1.0 / (16 * 25)
+        if (secondDelta > 1) {
+            secondDelta = 1
+        }
+        secondDelta = secondDelta - 1;
+        if (hourIndex == -1) {
+            hourIndex = 23
+        }
+        if (minuteIndex == -1) {
+            minuteIndex = 59
+        }
+        if (secondIndex == -1) {
+            secondIndex = 59
+        }
+        var curIndex = 0
+        var delta = 0
+        if (item.type == "week") {
+            curIndex = weekIndex
+        } else if (item.type == "ampm") {
+            curIndex = hourIndex > 11 ? 1 : 0
+        } else if (item.type == "month") {
+            curIndex = monthIndex
+        } else if (item.type == "day") {
+            curIndex = dayIndex
+        } else if (item.type == "hour") {
+            curIndex = hourIndex % item.array.length
+        } else if (item.type == "hour_23_23") {
+            hourIndex = hourIndex + 1;
+            if (hourIndex == 23) {
+                curIndex = 0;
+            } else if (hourIndex % 2 == 1) {
+                curIndex = (hourIndex + 1) / 2
+            } else {
+                curIndex = hourIndex / 2;
+            }
+        } else if (item.type == "lunarAnimal") {
+            curIndex = lunar.AnimalIndex;
+        } else if (item.type == "lunarMonth") {
+            curIndex = lunar.lMonth - 1;
+        } else if (item.type == "lunarDay") {
+            curIndex = lunar.lDay - 1;
+        } else if (item.type == "minute") {
+            delta = secondIndex == -1 ? secondDelta : 0
+            curIndex = minuteIndex
+        } else if (item.type == "second") {
+            delta = secondDelta
+            curIndex = secondIndex
+        }
+        return {
+            "index": curIndex, "delta": delta
+        }
+    }
+
+    function format(fmt, date) {
+        var o = {
+            "M+": date.getMonth() + 1,
+            "d+": date.getDate(),
+            "h+": date.getHours(),
+            "m+": date.getMinutes(),
+            "s+": date.getSeconds(),
+            "q+": Math.floor((date.getMonth() + 3) / 3),
+            "S": date.getMilliseconds()
+        };
+        if (/(y+)/.test(fmt))
+            fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt))
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+
+    function isMobile() {
+        if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+            return true
+        }
+        else {
+            return false
+        }
+    }
+
+
+</script>
+
+</html>
